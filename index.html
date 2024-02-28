@@ -1,11 +1,164 @@
-﻿<!DOCTYPE html>
-
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+﻿<!doctype html>
+<html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <title></title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Volcano Venture</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+        }
+
+        #game-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        #gameCanvas {
+            position: relative;
+            border: 1px solid;
+            width: 80vw;
+            height: 80vh;
+            max-width: 1400px;
+            max-height: 600px;
+            box-sizing: border-box;
+            background-color: black;
+        }
+
+        #nameInput {
+            position: absolute;
+            top: 45%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: white;
+        }
+
+        #startButton {
+            position: absolute;
+            top: 55%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: white;
+            background-color: black;
+            border: 1px solid white;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+        #startButton:hover{
+            color: black;
+            background-color: white;
+            border: 1px solid white;
+        }
+
+        #introBG{
+        background-image: url("../1004Project/gameImages/bg2.jpg");
+        position: relative;
+        border: 1px solid;
+        width: 80vw;
+        height: 80vh;   
+        max-width: 1400px;
+        max-height: 600px;
+        box-sizing: border-box;                
+        display: none;
+        }
+
+        #easyButton{
+            position: absolute;
+            top: 55%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: white;
+            background-color: black;
+            border: 1px solid white;
+            padding: 10px 20px;
+            cursor: pointer;
+            display: none;
+        }
+
+        #mediumButton{
+            position: absolute;
+            top: 55%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: white;
+            background-color: black;
+            border: 1px solid white;
+            padding: 10px 20px;
+            cursor: pointer;
+            display: none;
+        }
+
+        #hardButton{
+            position: absolute;
+            top: 55%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: white;
+            background-color: black;
+            border: 1px solid white;
+            padding: 10px 20px;
+            cursor: pointer;
+            display: none;
+        }
+
+        #infiniteButton{
+            position: absolute;
+            top: 55%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: white;
+            background-color: black;
+            border: 1px solid white;
+            padding: 10px 20px;
+            cursor: pointer;
+            display: none;
+        }
+    </style>
 </head>
 <body>
+    <div id="root"></div>
+    <h1>Volcano Venture</h1>
+    <link rel="stylesheet" href="Game.css" />
+    <div id="gameContainer">      
+        <div id="gameCanvas"></div>
 
+<!--User chooses their username-->
+        <div id="nameInput">
+            <label for="username">Name:</label>
+            <input type="text" id="username" placeholder="Name" style="color: black">
+        </div>
+        
+        <button id="startButton" onclick="startGameButton()">START GAME</button>
+
+<!--Intro-->
+        <div class="intro-container">
+        <div id="introBG"></div>
+        </div>
+
+<!--Level select-->
+        <button id="easyButton" onclick="easy()">EASY</button>
+        <button id="mediumButton" onclick="medium()">MEDIUM</button>
+        <button id="hardButton" onclick="hard()">HARD</button>
+        <button id="infiniteButton" onclick="infinite()">INFINITE</button>
+        
+    </div>
+    
+    
+
+    <script src="Game.js"></script>
 </body>
 </html>
