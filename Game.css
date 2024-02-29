@@ -1,6 +1,17 @@
 
 /*
+ #char1{
+            width: 100px;
+            background-image: url("../1004Project/gameImages/introChar1.jpg");            
+            display: none;
+        }
 
+        #char2{
+            background-image: url("../1004Project/gameImages/introChar2.jpg");
+            display: none;
+        }
+
+        
 #introBG{
         background-image: url("../1004Project/gameImages/bg2.jpg");
         position: absolute;

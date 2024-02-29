@@ -15,16 +15,14 @@ var maxHealth = 100;
 var health = maxHealth;
 
 //game
-function startGameButton() {
-    console.log("Game started")
-    getUsername();
-}
+// function startGameButton() {
+//     console.log("Game started")
+//     getUsername();
+// }
 
 function getUsername() {
     var correct = false;
-    var username;
-
-    username = document.getElementById("username").value;
+    var username = document.getElementById("username").value;
     
     if (username == ""){
         alert("Please enter a username");
@@ -38,18 +36,17 @@ function getUsername() {
         if (!correct) {
             alert("Retype your name");
             console.log("name isn't right");
-            document.getElementById("username").value = "";
+            username = "";
         } 
         
         else {
             alert("Start");
             console.log("name is correct");
-
         }
 
     }
-//move to line below "console.log("name is correct");
-    console.log("Username: ", username);
+//move to line below "console.log("name is correct");" when the username function is working
+    console.log("Username:", username);
     document.getElementById("nameInput").style.display = "none";
     document.getElementById("startButton").style.display = "none";
 
@@ -71,7 +68,7 @@ function gameIntro(){
 // conversation in html
 // onclick code
 function conversation(){
-
+    
 }
 
 function levelSelect(){
@@ -89,38 +86,49 @@ function levelSelect(){
     document.getElementById("hardButton").style.display = "block";
     document.getElementById("infiniteButton").style.display = "block";
 
-    var level = document.getElementById("level").value;
-    easy();
-    medium();
-    hard();
-    infinite();
+    var level;
 }
 
 function easy(){
-    levelCheck();
-    console.log("easy mode selected");
+    level = "easy";
+    console.log(level, "mode selected");
+
+    game();
 }
 
 function medium(){
-    levelCheck();
-    console.log("medium mode selected");
+    level = "medium";
+    console.log(level, "mode selected");
+
+    game();
 }
 
 function hard(){
-    levelCheck();
-    console.log("hard mode selected");
+    level = "hard";
+    console.log(level, "mode selected");
+
+    game();
 }
 
 function infinite(){
-    levelCheck();
-    console.log("infinite mode selected");
+    level = "infinite";
+    console.log(level, "mode selected");
 
+    game();
 }
 
-function levelCheck(){
-    // function to check if other modes are selected
-}
+function game(){
+    console.log("Game started")
 
+    document.getElementById("gameCanvas").style.display = "none";
+    document.getElementById("easyButton").style.display = "none";
+    document.getElementById("mediumButton").style.display = "none";
+    document.getElementById("hardButton").style.display = "none";
+    document.getElementById("infiniteButton").style.display = "none";
+
+    document.getElementById("gameBG").style.display = "block";
+    document.getElementById("gameChar").style.display = "block";
+}
 
 function contains(boundaries, object){
     return (object.x + object.width >= boundaries.x &&

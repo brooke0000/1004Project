@@ -21,15 +21,23 @@
             height: 100vh;
         }
 
-        #gameCanvas {
-            position: relative;
+        #gameBox{
             border: 1px solid;
+            width: 80vw;
+            height: 80vh;
+            max-width: 1400px;
+            max-height: 600px;
+        }
+
+        #gameCanvas {
+            position: relative;            
             width: 80vw;
             height: 80vh;
             max-width: 1400px;
             max-height: 600px;
             box-sizing: border-box;
             background-color: black;
+            transform: translate(0%, -135%);
         }
 
         #nameInput {
@@ -62,21 +70,44 @@
 
         #introBG{
         background-image: url("../1004Project/gameImages/bg2.jpg");
+        transform: translate(0%, -135%);
         position: relative;
         border: 1px solid;
         width: 80vw;
         height: 80vh;   
         max-width: 1400px;
         max-height: 600px;
-        box-sizing: border-box;                
+        box-sizing: border-box; 
         display: none;
+        }
+
+        #char1{
+            transform: translate(0%, -250%);
+            display: none;
+        }
+
+        #char2{
+            transform: translate(800%, -350%);
+            display: none;
+        }
+
+        #speechBlock{
+            height: 20vh;
+            width: 80vw;
+            background-color: black;
+            opacity: 0.5;
+            display: none;
+        }
+
+        #speech{
+            display: none;
         }
 
         #easyButton{
             position: absolute;
             top: 55%;
             left: 50%;
-            transform: translate(-50%, -50%);
+            transform: translate(-50%, -400%);
             text-align: center;
             color: white;
             background-color: black;
@@ -84,13 +115,19 @@
             padding: 10px 20px;
             cursor: pointer;
             display: none;
+        }
+
+        #easyButton:hover{
+            color: black;
+            background-color: white;
+            border: 1px solid white;
         }
 
         #mediumButton{
             position: absolute;
             top: 55%;
             left: 50%;
-            transform: translate(-50%, -50%);
+            transform: translate(-50%, -200%);
             text-align: center;
             color: white;
             background-color: black;
@@ -98,13 +135,19 @@
             padding: 10px 20px;
             cursor: pointer;
             display: none;
+        }
+
+        #mediumButton:hover{
+            color: black;
+            background-color: white;
+            border: 1px solid white;
         }
 
         #hardButton{
             position: absolute;
             top: 55%;
             left: 50%;
-            transform: translate(-50%, -50%);
+            transform: translate(-50%, 0%);
             text-align: center;
             color: white;
             background-color: black;
@@ -114,11 +157,17 @@
             display: none;
         }
 
+        #hardButton:hover{
+            color: black;
+            background-color: white;
+            border: 1px solid white;
+        }
+
         #infiniteButton{
             position: absolute;
             top: 55%;
             left: 50%;
-            transform: translate(-50%, -50%);
+            transform: translate(-50%, 200%);
             text-align: center;
             color: white;
             background-color: black;
@@ -127,14 +176,53 @@
             cursor: pointer;
             display: none;
         }
+
+        #infiniteButton:hover{
+            color: black;
+            background-color: white;
+            border: 1px solid white;
+        }
+        
+        #gameBG{
+        background-image: url("../1004Project/gameImages/inGameBG.png");
+        transform: translate(0%, -135%);
+        position: relative;
+        border: 1px solid;
+        width: 80vw;
+        height: 80vh;   
+        max-width: 1400px;
+        max-height: 600px;
+        box-sizing: border-box; 
+        display: none;
+        }
+
+        #gameChar{
+            display: none;
+        }
+
+        #instructions{
+            position: fixed;
+        }
+
     </style>
 </head>
 <body>
     <div id="root"></div>
     <h1>Volcano Venture</h1>
     <link rel="stylesheet" href="Game.css" />
-    <div id="gameContainer">      
+    <div id="gameContainer">          
+        <div id="gameBox"></div>  
+
+<!--Instructions-->
+        <h2>Instructions</h2>
+        <p>Use the "a" and "d" keys to move left and right.</p>
+        <p>Use the spacebar or the "w" key to jump.</p>
+        <p>Avoid the monsters and their attacks.</p>
+        <p>Collect the artifact by colliding with it.</p>
+
         <div id="gameCanvas"></div>
+
+
 
 <!--User chooses their username-->
         <div id="nameInput">
@@ -142,22 +230,33 @@
             <input type="text" id="username" placeholder="Name" style="color: black">
         </div>
         
-        <button id="startButton" onclick="startGameButton()">START GAME</button>
+        <button id="startButton" onclick="getUsername()">START GAME</button>
 
 <!--Intro-->
         <div class="intro-container">
-        <div id="introBG"></div>
+            <div id="introBG"></div>
+            <img id="char1" src="../1004Project/gameImages/introChar1.jpg">
+            <img id="char2" src="../1004Project/gameImages/introChar2.jpg">
+            <div id="speechBlock"></div>
+            <p id="speech">words</p>
         </div>
 
 <!--Level select-->
-        <button id="easyButton" onclick="easy()">EASY</button>
-        <button id="mediumButton" onclick="medium()">MEDIUM</button>
-        <button id="hardButton" onclick="hard()">HARD</button>
-        <button id="infiniteButton" onclick="infinite()">INFINITE</button>
-        
+        <div id="level">
+            <button id="easyButton" onclick="easy()">EASY</button>
+            <button id="mediumButton" onclick="medium()">MEDIUM</button>
+            <button id="hardButton" onclick="hard()">HARD</button>
+            <button id="infiniteButton" onclick="infinite()">INFINITE</button>
+        </div>
     </div>
     
-    
+<!--Game setup-->
+    <div id="gameSetup">
+        <div id="gameBG"></div>
+        <img id="gameChar" src="../1004Project/gameImages/inGameChar.png">
+    </div>
+
+
 
     <script src="Game.js"></script>
 </body>
