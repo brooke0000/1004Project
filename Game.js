@@ -1,18 +1,3 @@
-//objects
-var player = {x: 0, y: 0};
-var platform = {x: 0, y: 0};
-var monster = {x: 0, y: 0};
-
-//collisions
-var pCollision = contains(player, platform);
-var mCollision = contains(player, monster);
-
-//should the goblin shoot?
-var distance = hypotenuse(player, monster);
-
-//health
-var maxHealth = 100;
-var health = maxHealth;
 
 //game
 // function startGameButton() {
@@ -24,19 +9,32 @@ function getUsername() {
     var correct = false;
     var username = document.getElementById("username").value;
     
+    //checks the player entered a vallid name
+    //non-letters
+    for (let i = 0; i < username.length; i++) {
+        let characters = username.charCodeAt(i);
+
+        if( !(characters >= 65 && characters <= 90) && !(characters >= 97 && characters <= 122) ) {
+            alert("Please enter a name without a space, number, or special character");
+            console.log("Name invalid");
+            return;
+        }
+    }
+
+    //null entry
     if (username == ""){
         alert("Please enter a username");
         console.log("Name empty");
-        document.getElementById("username");
-        document.getElementById("startButton");
+        return;
     }
+    //confirmation
     else{
         correct = confirm("Is this correct?");    
 
         if (!correct) {
             alert("Retype your name");
             console.log("name isn't right");
-            username = "";
+            return;
         } 
         
         else {
@@ -45,7 +43,8 @@ function getUsername() {
         }
 
     }
-//move to line below "console.log("name is correct");" when the username function is working
+
+    //moves onto the introduction
     console.log("Username:", username);
     document.getElementById("nameInput").style.display = "none";
     document.getElementById("startButton").style.display = "none";
@@ -58,24 +57,22 @@ function gameIntro(){
 
     document.getElementById("gameCanvas").style.display = "none";
     document.getElementById("introBG").style.display = "block";
-   // document.getElementById("char1").style.display = "block";
-   // document.getElementById("char2").style.display = "block";
+    document.getElementById("char1").style.display = "block";
+    document.getElementById("char2").style.display = "block";
     document.getElementById("speechBlock").style.display = "block";
 
-    conversation();
-    levelSelect();
-}
-// conversation in html
-// onclick code
-function conversation(){
+    // conversation in html
+    // onclick code
+
     
+    //levelSelect();
 }
 
 function levelSelect(){
     document.getElementById("introBG").style.display = "none";
     document.getElementById("speechBlock").style.display = "none";
-    //document.getElementById("char1").style.display = "none";
-    //document.getElementById("char2").style.display = "none";
+    document.getElementById("char1").style.display = "none";
+    document.getElementById("char2").style.display = "none";
 
     document.getElementById("gameCanvas").style.display = "block";
 
@@ -117,7 +114,7 @@ function infinite(){
     game();
 }
 
-function game(){
+function game(){    
     console.log("Game started")
 
     document.getElementById("gameCanvas").style.display = "none";
@@ -128,6 +125,29 @@ function game(){
 
     document.getElementById("gameBG").style.display = "block";
     document.getElementById("gameChar").style.display = "block";
+
+    //objects
+        var player = {
+            x: 0, 
+            y: 0,        
+            name: username,
+            currentHealth: health,
+        };
+
+        var platform = {x: 0, y: 0};
+        var monster = {x: 0, y: 0};
+
+        //collisions
+        var pCollision = contains(player, platform);
+        var mCollision = contains(player, monster);
+
+        //should the goblin shoot?
+        var distance = hypotenuse(player, monster);
+
+        //health
+        var maxHealth = 100;
+        var health = maxHealth;
+
 }
 
 function contains(boundaries, object){
