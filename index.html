@@ -82,12 +82,12 @@
         }
 
         #char1{
-            transform: translate(0%, -250%);
+            /*transform: translate(0%, -250%);*/
             display: none;
         }
 
         #char2{
-            transform: translate(800%, -350%);
+            /*transform: translate(800%, -350%);*/
             display: none;
         }
 
@@ -238,6 +238,35 @@
             position: fixed;
         }
 
+        #gameOverButton{
+            position: absolute;
+            top: 55%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: white;
+            background-color: black;
+            border: 1px solid white;
+            padding: 10px 20px;
+            cursor: pointer;
+            display: none;
+        }
+
+        #gameOverButton:hover{
+            color: black;
+            background-color: white;
+            border: 1px solid white;
+        }
+
+        #death{
+            position: absolute;
+            color: red;
+            left: 500px;
+            top: 100px;
+            font-size: 100px;
+            display: none;
+        }
+
     </style>
 </head>
 <body>
@@ -269,8 +298,8 @@
 <!--Intro-->
         <div class="intro-container">
             <div id="introBG"></div>
-            <img id="char1" src="../1004Project/gameImages/introChar1.jpg">
-            <img id="char2" src="../1004Project/gameImages/introChar2.jpg">
+            <img id="char1" src="../1004Project/gameImages/introChar1.png">
+            <img id="char2" src="../1004Project/gameImages/introChar2.png">
             <div id="speechBlock"></div>
             <!--
                 Chief: "A prophecy foretells the eruption of the volcano, but there's hope. You must retrieve the ancient artefact 
@@ -313,10 +342,15 @@
 
         <!--optional features for hard and medium mode-->
         <img id="bow" src="../1004Project/gameImages/B+A.png">
+    
+
+    <!--game complete-->
+
+    <!--game over-->
+    <h3 id="death">YOU DIED</h3>
+    <button id="gameOverButton" onclick=levelSelect()>Level Select</button>
+
     </div>
-
-
-
     <script src="Game.js"></script>
 </body>
 </html>

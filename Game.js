@@ -68,11 +68,19 @@ function gameIntro(){
     levelSelect();
 }
 
+//level selection variables
+var level;
+//checks if hard mode is completed
+var complete = false;
+var failed = false;
+
 function levelSelect(){
     document.getElementById("introBG").style.display = "none";
     document.getElementById("speechBlock").style.display = "none";
     document.getElementById("char1").style.display = "none";
     document.getElementById("char2").style.display = "none";
+    document.getElementById("gameOverButton").style.display = "none";
+    document.getElementById("death").style.display = "none";
 
     document.getElementById("gameCanvas").style.display = "block";
 
@@ -83,9 +91,6 @@ function levelSelect(){
     document.getElementById("mediumButton").style.display = "block";
     document.getElementById("hardButton").style.display = "block";
     document.getElementById("infiniteButton").style.display = "block";
-
-    var level;
-    var complete = false;
 }
 
 //levels
@@ -109,11 +114,14 @@ function hard(){
 
     game();
     complete = true;
+    if(failed == true){
+        complete = false;
+    }
 }
 
 function infinite(){
     //checks if hard mode has been completed
-    if (complete == false)
+    if (!complete)
     {
         alert("Hard mode has not yet been completed");
         console.log("hard mode incomplete");
@@ -148,6 +156,11 @@ function game(){
     var platform = {x: 0, y: 0};
     var monster = {x: 0, y: 0};
 
+    //player
+    var avatar = document.getElementById("gameChar");
+    avatar.style.left = player.x + "px";
+    avatar.style.top = player.y + "px";
+
     //collisions
     var pCollision = contains(player, platform);
     var mCollision = contains(player, monster);
@@ -158,6 +171,10 @@ function game(){
     //health
     var maxHealth = 100;
     var health = maxHealth;
+
+    if (health == 0) {
+        gameOver();
+    }
         
     //game functions
     var key = {
@@ -167,9 +184,21 @@ function game(){
     };
 
     window.onkeydown = function(e){
-        if (e.keyCode === 65) key.left = true;
-        else if (e.keyCode === 68) key.right = true;
-        else if (e.keyCode === 87) key.jump = true;
+        if (e.keyCode === 65) {
+            key.left = true;
+            console.log("a key pressed");
+            player.x = -5;
+        }
+        else if (e.keyCode === 68) {
+            key.right = true;
+            console.log("d key pressed");
+            player.x = 5;
+        }
+        else if (e.keyCode === 87) {
+            key.jump = true;
+            console.log("w key pressed");
+            player.y = -5;
+        }
     };
 
     window.onkeyup = function(e){
@@ -187,6 +216,17 @@ function game(){
         );
     }
 
+    //checks which level is selected to include certain monsters/platforms or not
+    if (level == "medium" || level == "hard" || level == "infinite"){
+        console.log("spawn fireEntities and moving platforms");
+    }
+    if (level == "hard" || level == "infinite"){
+        console.log("spawn goblins and crumbling playforms");
+    }
+    if (level == "infinite"){
+        console.log("see how high the player can get");
+    }
+
     //distance between monster and player
     function hypotenuse(player, monster){
         xDistance = player.x - monster.x;
@@ -195,4 +235,37 @@ function game(){
         return Math.sqrt(xDistance * xDistance + yDistance * yDistance);
     }
 }
+
+function levelComplete(){
+    console.log(level, "mode completed");
+
+    //remove game assets
+    document.getElementById("gameBG").style.display = "none";
+    document.getElementById("gameChar").style.display = "none";
+
+    //add cutscreen assets
+    document.getElementById("introBG").style.display = "block";
+    document.getElementById("char1").style.display = "block";
+    document.getElementById("char2").style.display = "block";
+    document.getElementById("speechBlock").style.display = "block";
+
+    //back to level selection
+    levelSelect();
+}
+
+function gameOver(){
+    console.log("Player died");
+    //remove game assets
+    document.getElementById("gameBG").style.display = "none";
+    document.getElementById("gameChar").style.display = "none";
+
+    //add game over screen
+    document.getElementById("gameCanvas").style.display = "block";
+    document.getElementById("death").style.display = "block";
+    document.getElementById("gameOverButton").style.display = "block";
+
+    failed = true;
+    //back to level selection
+}
+
 //to flip an image : transform: scaleX(-1);
