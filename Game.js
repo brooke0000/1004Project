@@ -65,7 +65,7 @@ function gameIntro(){
     // onclick code
 
     
-    //levelSelect();
+    levelSelect();
 }
 
 function levelSelect(){
@@ -78,14 +78,17 @@ function levelSelect(){
 
     console.log("level selection started");
 
+    //level selection display
     document.getElementById("easyButton").style.display = "block";
     document.getElementById("mediumButton").style.display = "block";
     document.getElementById("hardButton").style.display = "block";
     document.getElementById("infiniteButton").style.display = "block";
 
     var level;
+    var complete = false;
 }
 
+//levels
 function easy(){
     level = "easy";
     console.log(level, "mode selected");
@@ -100,14 +103,22 @@ function medium(){
     game();
 }
 
-function hard(){
+function hard(){    
     level = "hard";
     console.log(level, "mode selected");
 
     game();
+    complete = true;
 }
 
 function infinite(){
+    //checks if hard mode has been completed
+    if (complete == false)
+    {
+        alert("Hard mode has not yet been completed");
+        console.log("hard mode incomplete");
+        return;
+    }
     level = "infinite";
     console.log(level, "mode selected");
 
@@ -127,42 +138,61 @@ function game(){
     document.getElementById("gameChar").style.display = "block";
 
     //objects
-        var player = {
-            x: 0, 
-            y: 0,        
-            name: username,
-            currentHealth: health,
-        };
+    var player = {
+        x: 0, 
+        y: 0,        
+        name: username,
+        currentHealth: health,
+    };
 
-        var platform = {x: 0, y: 0};
-        var monster = {x: 0, y: 0};
+    var platform = {x: 0, y: 0};
+    var monster = {x: 0, y: 0};
 
-        //collisions
-        var pCollision = contains(player, platform);
-        var mCollision = contains(player, monster);
+    //collisions
+    var pCollision = contains(player, platform);
+    var mCollision = contains(player, monster);
 
-        //should the goblin shoot?
-        var distance = hypotenuse(player, monster);
+    //should the goblin shoot?
+    var distance = hypotenuse(player, monster);
 
-        //health
-        var maxHealth = 100;
-        var health = maxHealth;
+    //health
+    var maxHealth = 100;
+    var health = maxHealth;
+        
+    //game functions
+    var key = {
+        left: false,
+        right: false,
+        jump: false,
+    };
 
+    window.onkeydown = function(e){
+        if (e.keyCode === 65) key.left = true;
+        else if (e.keyCode === 68) key.right = true;
+        else if (e.keyCode === 87) key.jump = true;
+    };
+
+    window.onkeyup = function(e){
+        if (e.keyCode === 65) key.left = false;
+        if (e.keyCode === 68) key.right = false;
+        if (e.keyCode === 87) key.jump = false;
+    };
+
+    //checks collisions
+    function contains(boundaries, object){
+        return (object.x + object.width >= boundaries.x &&
+            object.x <= boundaries.x + boundaries.width &&
+            object.y + object.height >= boundaries.y &&
+            object.y <= boundaries.y + boundaries.height
+        );
+    }
+
+    //distance between monster and player
+    function hypotenuse(player, monster){
+        xDistance = player.x - monster.x;
+        yDistance = player.y - monster.y;
+
+        return Math.sqrt(xDistance * xDistance + yDistance * yDistance);
+    }
 }
-
-function contains(boundaries, object){
-    return (object.x + object.width >= boundaries.x &&
-        object.x <= boundaries.x + boundaries.width &&
-        object.y + object.height >= boundaries.y &&
-        object.y <= boundaries.y + boundaries.height
-       );
-}
-
-function hypotenuse(player, monster){
-    xDistance = player.x - monster.x;
-    yDistance = player.y - monster.y;
-
-    return Math.sqrt(xDistance * xDistance + yDistance * yDistance);
-}
-
 //to flip an image : transform: scaleX(-1);
