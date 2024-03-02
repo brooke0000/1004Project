@@ -1,0 +1,28 @@
+#mediumButton:hover{
+            color: black;
+            background-color: white;
+            border: 1px solid white;
+        }
+
+        
+        #hardButton:hover{
+            color: black;
+            background-color: white;
+            border: 1px solid white;
+        }
+
+        #infiniteButton:hover{
+            color: black;
+            background-color: white;
+            border: 1px solid white;
+        }
+        #startButton:hover{
+            color: black;
+            background-color: white;
+            border: 1px solid white;
+        }
+        #gameOverButton:hover{
+            color: black;
+            background-color: white;
+            border: 1px solid white;
+        }

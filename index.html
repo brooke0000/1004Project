@@ -62,12 +62,6 @@
             cursor: pointer;
         }
 
-        #startButton:hover{
-            color: black;
-            background-color: white;
-            border: 1px solid white;
-        }
-
         #introBG{
         background-image: url("../1004Project/gameImages/bg2.jpg");
         transform: translate(0%, -135%);
@@ -82,24 +76,42 @@
         }
 
         #char1{
+            position: absolute;
+            max-width: 530px;
+            top: 120px;
+            left: 100px;
             /*transform: translate(0%, -250%);*/
             display: none;
         }
 
         #char2{
+            position: absolute;
+            max-width: 600px;
+            top: 150px;
+            right: 80px;
             /*transform: translate(800%, -350%);*/
             display: none;
         }
 
-        #speechBlock{
+        #speechBlock, #speechBlock2{
+            position: absolute;
+            top: 525px;
+            left: 145px;
             height: 20vh;
             width: 80vw;
             background-color: black;
-            opacity: 0.5;
+            opacity: 0.8;
+            cursor: pointer;
             display: none;
         }
 
-        #speech{
+        #speech1, #speech2, #speech3, #speech4{
+            color: white;
+            font-size: 20px;
+            position: absolute;
+            top: 525px;
+            left: 150px;
+            pointer-events: none;
             display: none;
         }
 
@@ -117,7 +129,7 @@
             display: none;
         }
 
-        #easyButton:hover{
+        #startButton:hover, #imageDisplay:hover, #easyButton:hover, #mediumButton:hover, #hardButton:hover, #infiniteButton:hover, #gameOverButton:hover{
             color: black;
             background-color: white;
             border: 1px solid white;
@@ -137,12 +149,6 @@
             display: none;
         }
 
-        #mediumButton:hover{
-            color: black;
-            background-color: white;
-            border: 1px solid white;
-        }
-
         #hardButton{
             position: absolute;
             top: 55%;
@@ -155,12 +161,6 @@
             padding: 10px 20px;
             cursor: pointer;
             display: none;
-        }
-
-        #hardButton:hover{
-            color: black;
-            background-color: white;
-            border: 1px solid white;
         }
 
         #infiniteButton{
@@ -177,12 +177,6 @@
             display: none;
         }
 
-        #infiniteButton:hover{
-            color: black;
-            background-color: white;
-            border: 1px solid white;
-        }
-        
         #gameBG{
         background-image: url("../1004Project/gameImages/inGameBG.png");
         transform: translate(0%, -135%);
@@ -252,12 +246,6 @@
             display: none;
         }
 
-        #gameOverButton:hover{
-            color: black;
-            background-color: white;
-            border: 1px solid white;
-        }
-
         #death{
             position: absolute;
             color: red;
@@ -267,12 +255,23 @@
             display: none;
         }
 
+        #imageDisplay{            
+            position: absolute;
+            top: 450px;
+            left: 692px;
+            text-align: center;
+            color: white;
+            background-color: black;
+            border: 1px solid white;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
     </style>
 </head>
 <body>
     <div id="root"></div>
     <h1>Volcano Venture</h1>
-    <link rel="stylesheet" href="Game.css" />
     <div id="gameContainer">          
         <div id="gameBox"></div>  
 
@@ -281,11 +280,9 @@
         <p>Use the "a" and "d" keys to move left and right.</p>
         <p>Use the the "w" key to jump.</p>
         <p>Avoid the monsters and their attacks.</p>
-        <p>Collect the artifact by colliding with it.</p>
+        <p>Collect the artefact by colliding with it.</p>
 
         <div id="gameCanvas"></div>
-
-
 
 <!--User chooses their username-->
         <div id="nameInput">
@@ -295,22 +292,20 @@
         
         <button id="startButton" onclick="getUsername()">START GAME</button>
 
+<!--image display-->
+        <button id="imageDisplay" onclick=images()>GAME IMAGES</button>
 <!--Intro-->
         <div class="intro-container">
             <div id="introBG"></div>
-            <img id="char1" src="../1004Project/gameImages/introChar1.png">
-            <img id="char2" src="../1004Project/gameImages/introChar2.png">
-            <div id="speechBlock"></div>
-            <!--
-                Chief: "A prophecy foretells the eruption of the volcano, but there's hope. You must retrieve the ancient artefact 
-                from the volcano's peak to control the elements and avert disaster."
+            <img id="char1" src="../1004Project/gameImages/introChar1.5.png">
+            <img id="char2" src="../1004Project/gameImages/introChar2.5.png">
+            <div id="speechBlock" onclick="conversation()"></div>
             
-                Player: "How am I supposed to get to the top of a volcano?"
-
-                Chief: "You will have to navigate treacherous platforms, collect power-ups, and face challenges. The island's fate is 
-                in your hands."
-            -->
-            <p id="speech">words</p>
+            <p id="speech1">Chief: "A prophecy foretells the end of this island, but there's hope. You must retrieve the ancient artefact 
+            from the volcano's peak to control the <br>elements and avert disaster." <br><br>(Click anywhere in the text box to continue) </p>
+            <p id="speech2">Player: "How am I supposed to get to the top of a volcano?" <br><br>(Click anywhere in the text box to continue) </p>
+            <p id="speech3">Chief: "You will have to navigate platforms, collect power-ups, and face monsters. The island's fate is 
+            in your hands." <br><br>(Click anywhere in the text box to continue) </p>
         </div>
 
 <!--Level select-->
@@ -345,11 +340,18 @@
     
 
     <!--game complete-->
+    <div id="speechBlock2" onclick=endSpeech()></div>
+    <p id="speech4">Chief: "Thank you for retriving this ancient artifact. The island is saved!" <br><br>(Click anywhere in the text box to continue) </p>
 
     <!--game over-->
     <h3 id="death">YOU DIED</h3>
-    <button id="gameOverButton" onclick=levelSelect()>Level Select</button>
+    <button id="gameOverButton" onclick=levelSelect()>LEVEL SELECTED</button>
 
+
+    <!--testing button-->
+    <button onclick=levelComplete()>game completed test</button>
+    <button onclick=gameOver()>you died test</button>
+    
     </div>
     <script src="Game.js"></script>
 </body>

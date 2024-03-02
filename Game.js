@@ -1,10 +1,10 @@
+//game images screen
+function images(){
+    document.getElementById("startButton").style.display = "none";
+    document.getElementById("imageDisplay").style.display = "none";
+}
 
-//game
-// function startGameButton() {
-//     console.log("Game started")
-//     getUsername();
-// }
-
+//username
 function getUsername() {
     var correct = false;
     var username = document.getElementById("username").value;
@@ -48,6 +48,7 @@ function getUsername() {
     console.log("Username:", username);
     document.getElementById("nameInput").style.display = "none";
     document.getElementById("startButton").style.display = "none";
+    document.getElementById("imageDisplay").style.display = "none";
 
     gameIntro();
 }
@@ -60,12 +61,26 @@ function gameIntro(){
     document.getElementById("char1").style.display = "block";
     document.getElementById("char2").style.display = "block";
     document.getElementById("speechBlock").style.display = "block";
+    document.getElementById("speech1").style.display = "block";
+}
 
-    // conversation in html
-    // onclick code
-
-    
-    levelSelect();
+// conversation in html
+var speech1 = document.getElementById("speech1");
+var speech2 = document.getElementById("speech2");
+var speech3 = document.getElementById("speech3");
+function conversation(){
+    if(speech1.style.display ==="block"){
+        speech1.style.display = "none";
+        speech2.style.display = "block";
+    }
+    else if(speech2.style.display === "block"){
+        speech2.style.display = "none";
+        speech3.style.display = "block";
+    }
+    else if(speech3.style.display === "block"){
+        speech3.style.display = "none";
+        levelSelect();
+    }
 }
 
 //level selection variables
@@ -81,6 +96,7 @@ function levelSelect(){
     document.getElementById("char2").style.display = "none";
     document.getElementById("gameOverButton").style.display = "none";
     document.getElementById("death").style.display = "none";
+    document.getElementById("speechBlock").style.display = "none";
 
     document.getElementById("gameCanvas").style.display = "block";
 
@@ -133,6 +149,8 @@ function infinite(){
     game();
 }
 
+var score = 0;
+
 function game(){    
     console.log("Game started")
 
@@ -153,8 +171,8 @@ function game(){
         currentHealth: health,
     };
 
-    var platform = {x: 0, y: 0};
-    var monster = {x: 0, y: 0};
+    var platform = {x: 0, y: 0, type: "",};
+    var monster = {x: 0, y: 0, type: "",};
 
     //player
     var avatar = document.getElementById("gameChar");
@@ -238,6 +256,7 @@ function game(){
 
 function levelComplete(){
     console.log(level, "mode completed");
+    //display scores
 
     //remove game assets
     document.getElementById("gameBG").style.display = "none";
@@ -247,8 +266,12 @@ function levelComplete(){
     document.getElementById("introBG").style.display = "block";
     document.getElementById("char1").style.display = "block";
     document.getElementById("char2").style.display = "block";
-    document.getElementById("speechBlock").style.display = "block";
+    document.getElementById("speechBlock2").style.display = "block";
+    document.getElementById("speech4").style.display = "block";
+}
 
+function endSpeech() {
+    document.getElementById("speech4").style.display = "none";
     //back to level selection
     levelSelect();
 }
