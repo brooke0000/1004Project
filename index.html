@@ -129,7 +129,7 @@
             display: none;
         }
 
-        #startButton:hover, #imageDisplay:hover, #easyButton:hover, #mediumButton:hover, #hardButton:hover, #infiniteButton:hover, #gameOverButton:hover{
+        #startButton:hover, #gameHelp:hover, #gameHelp2:hover, #easyButton:hover, #mediumButton:hover, #hardButton:hover, #infiniteButton:hover, #gameOverButton:hover{
             color: black;
             background-color: white;
             border: 1px solid white;
@@ -255,10 +255,10 @@
             display: none;
         }
 
-        #imageDisplay{            
+        #gameHelp{            
             position: absolute;
             top: 450px;
-            left: 692px;
+            left: 717px;
             text-align: center;
             color: white;
             background-color: black;
@@ -267,6 +267,34 @@
             cursor: pointer;
         }
 
+        #gameHelp2{
+            position: absolute;
+            top: 86px;
+            left: 150px;
+            text-align: center;
+            color: white;
+            background-color: black;
+            border: 1px solid white;
+            padding: 10px 20px;
+            cursor: pointer;
+            display: none;
+        }
+
+        #timeElapsed{
+            position: absolute;
+            top: 655px;
+            right: 150px;
+            color: black;
+            display: none;
+        }
+
+        #score{
+            position: absolute;
+            top: 200px;
+            left: 650px;
+            color: white;
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -292,8 +320,11 @@
         
         <button id="startButton" onclick="getUsername()">START GAME</button>
 
-<!--image display-->
-        <button id="imageDisplay" onclick=images()>GAME IMAGES</button>
+<!--display information-->
+<!--change placeHolder() to homeScreen() and levelSelect()-->
+        <button id="gameHelp" onclick="placeHolder()">HELP</button>
+        <button id="gameHelp2" onclick="placeHolder()">HELP</button>
+
 <!--Intro-->
         <div class="intro-container">
             <div id="introBG"></div>
@@ -338,15 +369,20 @@
         <!--optional features for hard and medium mode-->
         <img id="bow" src="../1004Project/gameImages/B+A.png">
     
+    <!--time-->
+    <h2 id="timeElapsed">Time: 0 seconds</h1>
 
     <!--game complete-->
     <div id="speechBlock2" onclick=endSpeech()></div>
     <p id="speech4">Chief: "Thank you for retriving this ancient artifact. The island is saved!" <br><br>(Click anywhere in the text box to continue) </p>
 
+    <!--score-->
+    <button id="gameOverButton" onclick=levelSelect()>LEVEL SELECT</button>
+    <h2 id="score">TIME ELAPSED: 0<br>LEVEL MULTIPLIER: 0<br>TOTAL SCORE: 0</h2>
+
     <!--game over-->
     <h3 id="death">YOU DIED</h3>
-    <button id="gameOverButton" onclick=levelSelect()>LEVEL SELECTED</button>
-
+    <button id="gameOverButton" onclick=levelSelect()>LEVEL SELECT</button>
 
     <!--testing button-->
     <button onclick=levelComplete()>game completed test</button>
