@@ -195,16 +195,24 @@
             transform: translate(0%, -810%);
             height: 15vh;
             width: auto;
-        }
-        #platform{
-            display: none;
+            position: relative;
         }
 
-        #crumbPlatform{
+        #platform, #crumbPlatform{
             display: none;
+            position:relative;
+            width: 10vw;
+            height: 5vh;
+            top: -1000px;
+            left: 50px;
         }
 
         #artefact{
+            position: relative;
+            top: -1500px;
+            left: 610px;
+            height: 5vh;
+            width:auto;
             display: none;
         }
 
@@ -374,7 +382,7 @@
 
     <!--game complete-->
     <div id="speechBlock2" onclick=endSpeech()></div>
-    <p id="speech4">Chief: "Thank you for retriving this ancient artifact. The island is saved!" <br><br>(Click anywhere in the text box to continue) </p>
+    <p id="speech4">Chief: "Thank you for retriving this ancient artefact. The island is saved!" <br><br>(Click anywhere in the text box to continue) </p>
 
     <!--score-->
     <button id="gameOverButton" onclick=levelSelect()>LEVEL SELECT</button>

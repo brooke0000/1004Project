@@ -1,3 +1,16 @@
+//TODO:
+//make player move left and right
+//make player jump
+//make it so platforms can spawn in random x coordinates
+//spawn artefact at the top
+//spawn moving platforms
+//spawn fire entities. make it so that they can only spawn on normal platforms
+//spawn crumbling platforms
+//spawn goblins
+//add shooting
+//maybe add powerups
+//maybe make different floors
+
 //page changes functions
 function removeHomePage() {
     document.getElementById("nameInput").style.display = "none";
@@ -214,23 +227,26 @@ function game(){
 
     //objects
     var player = {
+        avatar: document.getElementById("gameChar"),
+        jump: false,
         x: 0, 
         y: 0,        
         name: username,
         currentHealth: health,
+        level: level,
     };
 
-    var platform = {x: 0, y: 0, type: "",};
+    var platform = {
+        x: 0, 
+        y: 0, 
+        type: document.getElementById("platform"),
+    };
+    
     var monster = {x: 0, y: 0, type: "",};
 
-    //player
-    var avatar = document.getElementById("gameChar");
-    avatar.style.left = player.x + "px";
-    avatar.style.top = player.y + "px";
-
     //collisions
-    var pCollision = contains(player, platform);
-    var mCollision = contains(player, monster);
+    // var pCollision = contains(player, platform);
+    // var mCollision = contains(monster, platform);
 
     //should the goblin shoot?
     var distance = hypotenuse(player, monster);
@@ -250,43 +266,97 @@ function game(){
         jump: false,
     };
 
+    var flipped = false;
+
+    function jumping() {
+        player.y += 10;
+    }
+
+    function playerMovement(){
+        if(key.left){
+            player.x -= 10;
+        }
+        if(key.right){
+            player.x += 10;
+        }
+        if(key.jump){
+            player.y -= 10;
+            player.jump = false;
+            setTimeout(jumping, 150);
+        }
+        player.avatar.style.left = player.x + "px";
+        player.avatar.style.top = player.y + "px";
+    }
+
     window.onkeydown = function(e){
+        //a key
         if (e.keyCode === 65) {
             key.left = true;
             console.log("a key pressed");
-            player.x = -5;
-        }
-        else if (e.keyCode === 68) {
+            if (flipped == false){
+                document.getElementById("gameChar").style.transform = "scaleX(-1)";
+            }
+            flipped = true;
+            }
+        //d key
+        if (e.keyCode === 68) {
             key.right = true;
             console.log("d key pressed");
-            player.x = 5;
-        }
-        else if (e.keyCode === 87) {
+            if(flipped == true){
+                document.getElementById("gameChar").style.transform = "scaleX(1)";
+            }
+            flipped = false;
+            }
+        //w key
+        if (e.keyCode === 87) {
             key.jump = true;
             console.log("w key pressed");
-            player.y = -5;
-        }
+            }
     };
 
     window.onkeyup = function(e){
-        if (e.keyCode === 65) key.left = false;
-        if (e.keyCode === 68) key.right = false;
-        if (e.keyCode === 87) key.jump = false;
+        if (e.keyCode === 65) {
+            key.left = false;
+        }
+        else if (e.keyCode === 68) {
+            key.right = false;
+        }
+        else if (e.keyCode === 87) {
+            key.jump = false;
+        }
     };
 
-    //platforms
+    setInterval(playerMovement, 1000 / 20);
+
+    //normal platforms
+    var normal = document.getElementById("platform").style.display = "block";
     //set the x-axis so that it is random but y-axis is fixed
+    //0x - 1160x
+    platform.type = "normal";
+    platform.x = Math.floor(Math.random() * 1161);
+    // platform.type.style.left = platform.x + "px";
+    // platform.type.style.top = platform.y + "px";
+    console.log("platform's x-axis: " + platform.x);
+    //every -100 y up to -500
+    
     //if the final platform is landed on, reset the platforms and make the player start again from the bottom with randomised platforms
     //this repeats 3 times
     //if artefact collides with the player, levelComplete() is called
+    document.getElementById("artefact").style.display = "block";
+    collision(artefact, player.avatar);
 
     //checks collisions
-    function contains(boundaries, object){
-        return (object.x + object.width >= boundaries.x &&
-            object.x <= boundaries.x + boundaries.width &&
-            object.y + object.height >= boundaries.y &&
-            object.y <= boundaries.y + boundaries.height
-        );
+    // function contains(boundaries, object){
+    //     return (object.x + object.width >= boundaries.x &&
+    //         object.x <= boundaries.x + boundaries.width &&
+    //         object.y + object.height >= boundaries.y &&
+    //         object.y <= boundaries.y + boundaries.height
+    //     );
+    // }
+    function collision(object1, object2) {
+        if (object1.x == object2.x && object1.y == object2.y){
+            console.log("collision");
+        }
     }
 
     //checks which level is selected to include certain monsters/platforms or not
@@ -325,6 +395,8 @@ function levelComplete(){
     document.getElementById("gameBG").style.display = "none";
     document.getElementById("gameChar").style.display = "none";
     document.getElementById("timeElapsed").style.display = "none";
+    document.getElementById("artefact").style.display = "none";
+    document.getElementById("platform").style.display = "none";
 
     //add cutscreen assets
     document.getElementById("introBG").style.display = "block";
@@ -361,7 +433,11 @@ function scoreDisplay() {
     maxTime = maxTime - seconds;
     console.log("seconds: " + seconds);
     console.log("points: " + maxTime);
-    score = Math.round(maxTime * multiplier);
+    //500 is the completion score
+    score = Math.round(maxTime * multiplier) + 500;
+    if (maxTime <= 0){
+        score = 500;
+    }
 
     document.getElementById("gameCanvas").style.display = "block";
     document.getElementById("introBG").style.display = "none";
@@ -381,6 +457,8 @@ function gameOver(){
     document.getElementById("gameBG").style.display = "none";
     document.getElementById("gameChar").style.display = "none";
     document.getElementById("timeElapsed").style.display = "none";
+    document.getElementById("platform").style.display = "none";
+    document.getElementById("artefact").style.display = "none";
 
     //add game over screen
     document.getElementById("gameCanvas").style.display = "block";
@@ -390,5 +468,4 @@ function gameOver(){
 }
 
 //file handling
-
-//to flip an image : transform: scaleX(-1);
+//players name, level, time, and score must be displayed
