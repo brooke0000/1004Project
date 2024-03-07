@@ -1,8 +1,6 @@
 //TODO:
-//make player move left and right
-//make player jump
 //make it so platforms can spawn in random x coordinates
-//spawn artefact at the top
+//fix player jump
 //spawn moving platforms
 //spawn fire entities. make it so that they can only spawn on normal platforms
 //spawn crumbling platforms
@@ -229,24 +227,52 @@ function game(){
     var player = {
         avatar: document.getElementById("gameChar"),
         jump: false,
-        x: 0, 
-        y: 0,        
+        x: 140, 
+        y: 570,        
         name: username,
         currentHealth: health,
         level: level,
     };
 
+    //randomise platform type
+    function randomPlatformType() {
+        var num;
+        var type;
+        if (level == "hard" || level == "infinite") {
+            num = Math.floor(Math.random() * 2);
+            if (num === 0) {
+                type = "crumbling";
+            }
+            else if (num === 1) {
+                type = "moving";
+            }
+            else {
+                type = "normal";
+            }
+        }
+        else if (level == "medium") {
+            num = Math.floor(Math.random() * 1);
+            if (num === 0) {
+                type = "moving";
+            }
+            else {
+                type = "normal";
+            }
+        }
+        else if (level == "easy") {
+            type = "normal";
+        }
+        console.log("type: " + type);
+        return type;
+    }
+
     var platform = {
-        x: 0, 
-        y: 0, 
-        type: document.getElementById("platform"),
+        x: 140, 
+        y: 600, 
+        type: "normal",
     };
     
     var monster = {x: 0, y: 0, type: "",};
-
-    //collisions
-    // var pCollision = contains(player, platform);
-    // var mCollision = contains(monster, platform);
 
     //should the goblin shoot?
     var distance = hypotenuse(player, monster);
@@ -256,6 +282,8 @@ function game(){
     var health = maxHealth;
 
     if (health == 0) {
+        player.x = 140;
+        player.y = 570;
         gameOver();
     }
         
@@ -275,17 +303,28 @@ function game(){
     function playerMovement(){
         if(key.left){
             player.x -= 10;
+            console.log("player's x-axis: " + player.x);
+            //if player goes to the game left border
+            if (player.x < 140){
+                player.x += 10;
+            }
         }
         if(key.right){
             player.x += 10;
+            console.log("player's x-axis: " + player.x);
+            //if player goes to the game right border
+            if (player.x > 1310){
+                player.x -= 10;
+            }
         }
         if(key.jump){
             player.y -= 10;
             player.jump = false;
             setTimeout(jumping, 150);
+            console.log("player's y-axis: " + player.y);
         }
         player.avatar.style.left = player.x + "px";
-        player.avatar.style.top = player.y + "px";
+        player.avatar.style.top = player.y + "px";        
     }
 
     window.onkeydown = function(e){
@@ -311,7 +350,7 @@ function game(){
         if (e.keyCode === 87) {
             key.jump = true;
             console.log("w key pressed");
-            }
+        }
     };
 
     window.onkeyup = function(e){
@@ -328,22 +367,40 @@ function game(){
 
     setInterval(playerMovement, 1000 / 20);
 
-    //normal platforms
-    var normal = document.getElementById("platform").style.display = "block";
     //set the x-axis so that it is random but y-axis is fixed
-    //0x - 1160x
-    platform.type = "normal";
-    platform.x = Math.floor(Math.random() * 1161);
-    // platform.type.style.left = platform.x + "px";
-    // platform.type.style.top = platform.y + "px";
-    console.log("platform's x-axis: " + platform.x);
     //every -100 y up to -500
     
+    //0x - 1160x
+
+    platform.type = randomPlatformType();
+    
+    if (platform.type == "crumbling"){
+        document.getElementById("crumbling").style.display = "block";
+        platform.x = Math.floor(Math.random() * 1181) + 180;
+        platform.y = 600;
+    }
+    else{
+        document.getElementById("platform").style.display = "block";
+        platform.x = Math.floor(Math.random() * 1061) + 150;
+        platform.y = 600;
+    }
+
+    document.getElementById("platform").style.left = platform.x + "px";
+    document.getElementById("platform").style.top = platform.y + "px";
+
+    document.getElementById("crumbling").style.left = platform.x + "px";
+    document.getElementById("crumbling").style.top = platform.y + "px";
+
+    console.log("platform's x-axis: " + platform.x);
+    console.log("platform's y-axis: " + platform.y);
     //if the final platform is landed on, reset the platforms and make the player start again from the bottom with randomised platforms
     //this repeats 3 times
     //if artefact collides with the player, levelComplete() is called
     document.getElementById("artefact").style.display = "block";
     collision(artefact, player.avatar);
+    // player.x = 140;
+    // player.y = 570;
+    // levelComplete();
 
     //checks collisions
     // function contains(boundaries, object){
@@ -361,13 +418,13 @@ function game(){
 
     //checks which level is selected to include certain monsters/platforms or not
     if (level == "easy" || level == "medium" || level == "hard" || level == "infinite"){
-        console.log("spawn normal platforms")
+        console.log("spawn normal platforms");
     }
     if (level == "medium" || level == "hard" || level == "infinite"){
         console.log("spawn fireEntities and moving platforms");
     }
     if (level == "hard" || level == "infinite"){
-        console.log("spawn goblins and crumbling playforms");
+        console.log("spawn goblins and crumbling platforms");
     }
     if (level == "infinite"){
         console.log("see how high the player can get");
@@ -397,6 +454,7 @@ function levelComplete(){
     document.getElementById("timeElapsed").style.display = "none";
     document.getElementById("artefact").style.display = "none";
     document.getElementById("platform").style.display = "none";
+    document.getElementById("crumbling").style.display = "none";
 
     //add cutscreen assets
     document.getElementById("introBG").style.display = "block";
@@ -458,6 +516,7 @@ function gameOver(){
     document.getElementById("gameChar").style.display = "none";
     document.getElementById("timeElapsed").style.display = "none";
     document.getElementById("platform").style.display = "none";
+    document.getElementById("crumbling").style.display = "none";
     document.getElementById("artefact").style.display = "none";
 
     //add game over screen
@@ -469,3 +528,5 @@ function gameOver(){
 
 //file handling
 //players name, level, time, and score must be displayed
+var file = new Blob(["NAME: " + username + "\nLEVEL: " + level + "\nTIME: " + seconds + "\nSCORE: " + score], {type:"text/plain"});
+var read = new FileReader();
