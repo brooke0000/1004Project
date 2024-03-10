@@ -1,13 +1,26 @@
-//TODO:
-//make it so platforms can spawn in random x coordinates
-//fix player jump
-//spawn moving platforms
-//spawn fire entities. make it so that they can only spawn on normal platforms
-//spawn crumbling platforms
-//spawn goblins
-//add shooting
-//maybe add powerups
-//maybe make different floors
+/*
+TODO:
+fix player jump
+collide with platforms when jumped on
+file handling
+////////////////////////////////hopefully finish up to here by the end of this week////////////////////////////////
+spawn multiple randomised platforms
+make moving platforms move
+game won when player collides with artefact
+fix players position when they respawn
+spawn fire entities. make it so that they can only spawn on normal platforms
+health
+instantly kill player when they collide with a monster
+fall damage
+////////////////////////////////hopefully finish up to here by the 17th////////////////////////////////
+make crumbling platforms crumble
+spawn goblins on normal platforms
+add shooting
+////////////////////////////////hopefully finish up to here by the 21st////////////////////////////////
+maybe add powerups
+make help screen available
+maybe make different floors
+*/
 
 //page changes functions
 function removeHomePage() {
@@ -222,8 +235,10 @@ function game(){
 
     document.getElementById("gameBG").style.display = "block";
     document.getElementById("gameChar").style.display = "block";
+    document.getElementById("healthLoss").style.display = "block";
+    document.getElementById("health").style.display = "block";
 
-    //objects
+    //player object
     var player = {
         avatar: document.getElementById("gameChar"),
         jump: false,
@@ -266,13 +281,23 @@ function game(){
         return type;
     }
 
+    //platform objects
     var platform = {
         x: 140, 
         y: 600, 
         type: "normal",
     };
+    var platform2 = Object.create(platform);
+    var platform3 = Object.create(platform);
+    var platform4 = Object.create(platform);
+    var platform5 = Object.create(platform);
     
-    var monster = {x: 0, y: 0, type: "",};
+    //monster objects
+    var monster = {
+        x: 0, 
+        y: 0, 
+        type: "fireEntity",
+    };
 
     //should the goblin shoot?
     var distance = hypotenuse(player, monster);
@@ -297,7 +322,7 @@ function game(){
     var flipped = false;
 
     function jumping() {
-        player.y += 10;
+        player.y += 15;
     }
 
     function playerMovement(){
@@ -318,7 +343,7 @@ function game(){
             }
         }
         if(key.jump){
-            player.y -= 10;
+            player.y -= 15;
             player.jump = false;
             setTimeout(jumping, 150);
             console.log("player's y-axis: " + player.y);
@@ -368,10 +393,6 @@ function game(){
     setInterval(playerMovement, 1000 / 20);
 
     //set the x-axis so that it is random but y-axis is fixed
-    //every -100 y up to -500
-    
-    //0x - 1160x
-
     platform.type = randomPlatformType();
     
     if (platform.type == "crumbling"){
@@ -393,28 +414,73 @@ function game(){
 
     console.log("platform's x-axis: " + platform.x);
     console.log("platform's y-axis: " + platform.y);
+
+    //checks collisions
+function collision(){
+    var leftPlatform = platform.x - 50;
+    var rightPlatform = platform.x + 130;
+    var topPlatform = platform.y;
+
+    var playerBottom = player.y - 60;
+        
+    /*
+    the area the player can't come into contact with is player.x >= leftPlatform, player.x <= rightPlatform, and player.y <= topPlatform
+    but the player must be able to come into contact with player.x <= leftPlatform and player.x >= rightPlatform if player.y >= topPlatform
+    
+    when the player is on the ground, playerBottom = 510 and when the player jumps, playerBottom = 465. topPlatform = 600
+    player.y y-axis is 510
+    */
+   console.log("playerBottom = " + playerBottom + " topPlatform = " + topPlatform);
+   //the area of the platform and under it
+    if(player.x >= leftPlatform && player.x <= rightPlatform && playerBottom <= topPlatform){
+        console.log("collision detected");
+        if(player.x >= leftPlatform){
+            player.x -= 10;
+        }
+        else if(player.x <= rightPlatform){
+            player.x += 10;
+        }        
+    }    
+    //the area surrounding the platform
+    else if(player.x <= leftPlatform && player.x >= rightPlatform && playerBottom >= topPlatform){
+        player.y -= 15;
+        if (playerBottom <= topPlatform){
+            player.y += 15;
+        }
+    }
+}
+
+setInterval(collision, 1000 / 60);
+
     //if the final platform is landed on, reset the platforms and make the player start again from the bottom with randomised platforms
     //this repeats 3 times
     //if artefact collides with the player, levelComplete() is called
     document.getElementById("artefact").style.display = "block";
-    collision(artefact, player.avatar);
-    // player.x = 140;
-    // player.y = 570;
     // levelComplete();
 
-    //checks collisions
-    // function contains(boundaries, object){
-    //     return (object.x + object.width >= boundaries.x &&
-    //         object.x <= boundaries.x + boundaries.width &&
-    //         object.y + object.height >= boundaries.y &&
-    //         object.y <= boundaries.y + boundaries.height
-    //     );
+
+    // function collision(player, platform) {
+    //     //player edges
+    //     var playerLeft = player.x;
+    //     var playerRight = player.x + player.avatar.width;
+    //     var playerTop = player.y;
+    //     var playerBottom = player.y + player.avatar.height;
+
+    //     //platform edges
+    //     var platformLeft = platform.x;
+    //     var platformRight = platform.x + document.getElementById("platform").width;
+    //     var platformTop = platform.y;
+    //     var platformBottom = platform.y + document.getElementById("platform").height;
+
+    //     //collision check
+    //     if (playerRight >= platformLeft && playerLeft <= platformRight && playerBottom >= platformTop && playerTop <= platformBottom) {
+    //         console.log("collision detected");
+    //         return true;
+    //     }
+    //     else{
+    //         return false;
+    //     }
     // }
-    function collision(object1, object2) {
-        if (object1.x == object2.x && object1.y == object2.y){
-            console.log("collision");
-        }
-    }
 
     //checks which level is selected to include certain monsters/platforms or not
     if (level == "easy" || level == "medium" || level == "hard" || level == "infinite"){
