@@ -215,7 +215,8 @@ function time(startTime){
 
 var score = 0;
 var floor = 1;
-var interval;
+var interval;//platforms
+var platformArray = [];
 
 function game(){ 
     console.log("Game started")   
@@ -242,6 +243,7 @@ function game(){
     var player = {
         avatar: document.getElementById("gameChar"),
         jump: false,
+        jumpHeight: 0,
         x: 140, 
         y: 570,        
         name: username,
@@ -287,11 +289,11 @@ function game(){
         y: 600, 
         type: "normal",
     };
-    var platform2 = Object.create(platform);
-    var platform3 = Object.create(platform);
-    var platform4 = Object.create(platform);
-    var platform5 = Object.create(platform);
     
+    
+    //create platforms
+   // createPlatform(platform1, 0);
+
     //monster objects
     var monster = {
         x: 0, 
@@ -323,6 +325,7 @@ function game(){
 
     function jumping() {
         player.y += 15;
+        //player.jumpHeight += 15;
     }
 
     function playerMovement(){
@@ -392,60 +395,91 @@ function game(){
 
     setInterval(playerMovement, 1000 / 20);
 
+function createPlatform(){
+    var spawnPlatform = Object.create(platform);
+
     //set the x-axis so that it is random but y-axis is fixed
-    platform.type = randomPlatformType();
+    spawnPlatform.type = randomPlatformType();
     
-    if (platform.type == "crumbling"){
-        document.getElementById("crumbling").style.display = "block";
-        platform.x = Math.floor(Math.random() * 1181) + 180;
-        platform.y = 600;
+    var platformID;
+    var crumblingID;
+    
+    platformID = "platform" + platformArray.length;
+    crumblingID = "crumbling" + platformArray.length;
+
+    if (spawnPlatform.type == "crumbling"){
+        document.getElementById(crumblingID).style.display = "block";
+        spawnPlatform.x = Math.floor(Math.random() * 1181)
+        // + 180;
     }
     else{
-        document.getElementById("platform").style.display = "block";
-        platform.x = Math.floor(Math.random() * 1061) + 150;
-        platform.y = 600;
+        document.getElementById(platformID).style.display = "block";
+        spawnPlatform.x = Math.floor(Math.random() * 1000) + 100;
     }
 
-    document.getElementById("platform").style.left = platform.x + "px";
-    document.getElementById("platform").style.top = platform.y + "px";
+    if (platformArray.length > 0){
+        spawnPlatform.y = platformArray[platformArray.length - 1].y - 45;
+    }
+    else{
+        spawnPlatform.y = 600;
+    }
 
-    document.getElementById("crumbling").style.left = platform.x + "px";
-    document.getElementById("crumbling").style.top = platform.y + "px";
+    document.getElementById(platformID).style.left = spawnPlatform.x + "px";
+    document.getElementById(platformID).style.top = spawnPlatform.y + "px";
 
-    console.log("platform's x-axis: " + platform.x);
-    console.log("platform's y-axis: " + platform.y);
+    document.getElementById(crumblingID).style.left = spawnPlatform.x + "px";
+    document.getElementById(crumblingID).style.top = spawnPlatform.y + "px";
+
+    platformArray.push(spawnPlatform);
+
+    console.log("platform's x-axis: " + spawnPlatform.x);
+    console.log("platform's y-axis: " + spawnPlatform.y);
+}
+
+createPlatform();
+createPlatform();
+createPlatform();
+createPlatform();
+createPlatform();
+createPlatform();
+
+for (var i = 0; i < platformArray.length; i++){
+    var currentPlatform = platformArray[i];
+}
 
     //checks collisions
 function collision(){
-    var leftPlatform = platform.x - 50;
-    var rightPlatform = platform.x + 130;
-    var topPlatform = platform.y;
+    for (var i = 0; i < platformArray.length; i++){
+        var currentPlatform = platformArray[i];
 
-    var playerBottom = player.y - 60;
-        
-    /*
-    the area the player can't come into contact with is player.x >= leftPlatform, player.x <= rightPlatform, and player.y <= topPlatform
-    but the player must be able to come into contact with player.x <= leftPlatform and player.x >= rightPlatform if player.y >= topPlatform
-    
-    when the player is on the ground, playerBottom = 510 and when the player jumps, playerBottom = 465. topPlatform = 600
-    player.y y-axis is 510
-    */
-   console.log("playerBottom = " + playerBottom + " topPlatform = " + topPlatform);
-   //the area of the platform and under it
-    if(player.x >= leftPlatform && player.x <= rightPlatform && playerBottom <= topPlatform){
-        console.log("collision detected");
-        if(player.x >= leftPlatform){
-            player.x -= 10;
-        }
-        else if(player.x <= rightPlatform){
-            player.x += 10;
-        }        
-    }    
-    //the area surrounding the platform
-    else if(player.x <= leftPlatform && player.x >= rightPlatform && playerBottom >= topPlatform){
-        player.y -= 15;
-        if (playerBottom <= topPlatform){
-            player.y += 15;
+        var leftPlatform = currentPlatform.x - 50;
+        var rightPlatform = currentPlatform.x + 280;
+        var topPlatform = currentPlatform.y;
+
+        var midPoint = (rightPlatform + leftPlatform) / 2;
+
+        var playerBottom = player.y + 75;
+        var playerTop = player.y;
+
+    //the area of the platform and under it
+        while(player.x >= leftPlatform && player.x <= rightPlatform && playerBottom > topPlatform && playerTop < topPlatform){
+            console.log("collision detected");
+            console.log("topPlatform = " + topPlatform + " playerBottom = " + playerBottom);
+            
+            if(player.x >= leftPlatform && player.x <= midPoint){
+                player.x -= 10;
+            }
+            else if(player.x <= rightPlatform && player.x >= midPoint){
+                player.x += 10;
+            }        
+        }  
+        //the area surrounding the platform
+        if(player.x >= leftPlatform && player.x <= rightPlatform && playerBottom <= topPlatform){
+            console.log("player on platform");
+            player.y -= 15;
+            if (playerBottom <= topPlatform){
+                player.y += 15;
+            }
         }
     }
 }
@@ -457,30 +491,6 @@ setInterval(collision, 1000 / 60);
     //if artefact collides with the player, levelComplete() is called
     document.getElementById("artefact").style.display = "block";
     // levelComplete();
-
-
-    // function collision(player, platform) {
-    //     //player edges
-    //     var playerLeft = player.x;
-    //     var playerRight = player.x + player.avatar.width;
-    //     var playerTop = player.y;
-    //     var playerBottom = player.y + player.avatar.height;
-
-    //     //platform edges
-    //     var platformLeft = platform.x;
-    //     var platformRight = platform.x + document.getElementById("platform").width;
-    //     var platformTop = platform.y;
-    //     var platformBottom = platform.y + document.getElementById("platform").height;
-
-    //     //collision check
-    //     if (playerRight >= platformLeft && playerLeft <= platformRight && playerBottom >= platformTop && playerTop <= platformBottom) {
-    //         console.log("collision detected");
-    //         return true;
-    //     }
-    //     else{
-    //         return false;
-    //     }
-    // }
 
     //checks which level is selected to include certain monsters/platforms or not
     if (level == "easy" || level == "medium" || level == "hard" || level == "infinite"){
@@ -503,6 +513,7 @@ setInterval(collision, 1000 / 60);
 
         return Math.sqrt(xDistance * xDistance + yDistance * yDistance);
     }
+
 }
 
 function levelComplete(){
@@ -519,8 +530,15 @@ function levelComplete(){
     document.getElementById("gameChar").style.display = "none";
     document.getElementById("timeElapsed").style.display = "none";
     document.getElementById("artefact").style.display = "none";
-    document.getElementById("platform").style.display = "none";
-    document.getElementById("crumbling").style.display = "none";
+    document.getElementById("healthLoss").style.display = "none";
+    document.getElementById("health").style.display = "none";
+    
+    for (var i = 0; i < platformArray.length; i++) {
+        var platformID = "platform" + i;
+        var crumblingID = "crumbling" + i;
+        document.getElementById(platformID).style.display = "none";
+        document.getElementById(crumblingID).style.display = "none";
+    }
 
     //add cutscreen assets
     document.getElementById("introBG").style.display = "block";
@@ -563,6 +581,8 @@ function scoreDisplay() {
         score = 500;
     }
 
+    fileHandling();
+
     document.getElementById("gameCanvas").style.display = "block";
     document.getElementById("introBG").style.display = "none";
     document.getElementById("char1").style.display = "none";
@@ -581,9 +601,16 @@ function gameOver(){
     document.getElementById("gameBG").style.display = "none";
     document.getElementById("gameChar").style.display = "none";
     document.getElementById("timeElapsed").style.display = "none";
-    document.getElementById("platform").style.display = "none";
-    document.getElementById("crumbling").style.display = "none";
     document.getElementById("artefact").style.display = "none";
+    document.getElementById("healthLoss").style.display = "none";
+    document.getElementById("health").style.display = "none";
+
+    for (var i = 0; i < platformArray.length; i++) {
+        var platformID = "platform" + i;
+        var crumblingID = "crumbling" + i;
+        document.getElementById(platformID).style.display = "none";
+        document.getElementById(crumblingID).style.display = "none";
+    }
 
     //add game over screen
     document.getElementById("gameCanvas").style.display = "block";
@@ -593,6 +620,16 @@ function gameOver(){
 }
 
 //file handling
-//players name, level, time, and score must be displayed
-var file = new Blob(["NAME: " + username + "\nLEVEL: " + level + "\nTIME: " + seconds + "\nSCORE: " + score], {type:"text/plain"});
-var read = new FileReader();
+function fileHandling() {
+    //players name, level, time, and score must be displayed
+    let link = document.createElement("results");
+    link.download = "downloadScore.txt";
+
+    var playerData = "NAME: " + username + "\nLEVEL: " + level + "\nTIME: " + seconds + "\nSCORE: " + score;
+    var file = new Blob([playerData], {type:"text/plain"});
+
+    link.href = URL.createObjectURL(file);
+    link.click();
+
+    //var read = new FileReader();
+}
