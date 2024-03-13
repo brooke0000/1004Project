@@ -199,7 +199,7 @@
             position: absolute;
         }
 
-        #platform0, #platform1, #platform2, #platform3, #platform4, #platform5{
+        #platform0, #platform1, #platform2, #platform3, #platform4, #platform5, #platform6{
             display: none;
             position: absolute;
             width: 20vw;
@@ -208,7 +208,7 @@
             left: 50px;
         }
 
-        #crumbling0, #crumbling1, #crumbling2, #crumbling3, #crumbling4, #crumbling5{
+        #crumbling0, #crumbling1, #crumbling2, #crumbling3, #crumbling4, #crumbling5, #crumbling6{
             display: none;
             position: absolute;
             width: 20vw;
@@ -333,6 +333,14 @@
             top: 85px;
             left: 150px;
         }
+
+        #file{
+            display: none;
+            position: absolute;
+            top: 85px;
+            right: 150px;
+            color:white;
+        }
     </style>
 </head>
 <body>
@@ -397,12 +405,14 @@
         <img id="platform3" src="../1004Project/gameImages/platform.png">
         <img id="platform4" src="../1004Project/gameImages/platform.png">
         <img id="platform5" src="../1004Project/gameImages/platform.png">
+        <img id="platform6" src="../1004Project/gameImages/platform.png">
         <img id="crumbling0" src="../1004Project/gameImages/Platform_crumb.png">
         <img id="crumbling1" src="../1004Project/gameImages/Platform_crumb.png">
         <img id="crumbling2" src="../1004Project/gameImages/Platform_crumb.png">
         <img id="crumbling3" src="../1004Project/gameImages/Platform_crumb.png">
         <img id="crumbling4" src="../1004Project/gameImages/Platform_crumb.png">
         <img id="crumbling5" src="../1004Project/gameImages/Platform_crumb.png">
+        <img id="crumbling6" src="../1004Project/gameImages/Platform_crumb.png">
 
         <!--medium mode objects-->
         <img id="fireEntity" src="../1004Project/gameImages/fireEntity.png">
@@ -431,6 +441,9 @@
     <!--score-->
     <button id="gameOverButton" onclick=levelSelect()>LEVEL SELECT</button>
     <h2 id="score">TIME ELAPSED: 0<br>LEVEL MULTIPLIER: 0<br>TOTAL SCORE: 0</h2>
+
+    <!--file handling-->
+    <a id="file" download = "playerData.txt">DOWNLOAD RESULTS</a>
 
     <!--game over-->
     <h3 id="death">YOU DIED</h3>
