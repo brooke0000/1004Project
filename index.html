@@ -40,6 +40,14 @@
             transform: translate(0%, -135%);
         }
 
+        #scoreComparison{
+            display: none;
+            position: absolute;
+            top: 200px;
+            left: 150px;
+            color: white;
+        }
+
         #nameInput {
             position: absolute;
             top: 45%;
@@ -217,6 +225,15 @@
             left: 150px;
         }
 
+        #artefactPlatform{
+            display: none;
+            position: absolute;
+            width: 20vw;
+            height: 5vh;
+            top: 130px;
+            left: 610px;
+        }
+
         #artefact{
             position: absolute;
             top: 100px;
@@ -341,6 +358,14 @@
             right: 150px;
             color:white;
         }
+        
+        #previousResults, #results{
+            display: none;
+            position: absolute;
+            top: 250px;
+            left: 150px;
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -363,6 +388,10 @@
             <label for="username">Name:</label>
             <input type="text" id="username" placeholder="Name" style="color: black">
         </div>
+        
+        <input type="file" id="previousResults" onchange="scoreComparison()">
+        <div id="scoreComparison">COMPARE PREVIOUS RESULTS:</div>  
+        <div id="results"></div>
         
         <button id="startButton" onclick="getUsername()">START GAME</button>
 
@@ -399,6 +428,7 @@
         <div id="gameBG"></div>
         <img id="gameChar" src="../1004Project/gameImages/inGameChar.png">
         <img id="artefact" src="../1004Project/gameImages/artefact.png">
+        <img id="artefactPlatform" src="../1004Project/gameImages/platform.png">
         <img id="platform0" src="../1004Project/gameImages/platform.png">
         <img id="platform1" src="../1004Project/gameImages/platform.png">
         <img id="platform2" src="../1004Project/gameImages/platform.png">

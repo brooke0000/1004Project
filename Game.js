@@ -1,5 +1,8 @@
 /*
 TODO:
+upload previous data
+convert seconds to minutes
+add game time
 make moving platforms move
 make crumbling platforms crumble
 game won when player collides with artefact
@@ -156,6 +159,9 @@ function levelSelect(){
     document.getElementById("speechBlock").style.display = "none";
     document.getElementById("score").style.display = "none";
     document.getElementById("file").style.display = "none";
+    document.getElementById("scoreComparison").style.display = "none";
+    document.getElementById("previousResults").style.display = "none";
+    document.getElementById("results").style.display = "none";
 
     document.getElementById("gameCanvas").style.display = "block";
 
@@ -258,7 +264,13 @@ function game(){
     document.getElementById("healthLoss").style.display = "block";
     document.getElementById("health").style.display = "block";
 
-    
+    // artefact object
+    var artefactOb = {
+        x: 150,
+        y: 150,
+        visible: true,
+        collected: false,
+    };
 
     //randomise platform type
     function randomPlatformType() {
@@ -446,6 +458,16 @@ function game(){
         //pushes into the platform array
         platformArray.push(spawnPlatform);
 
+        //moving type code
+        function moving(){
+            
+        }
+
+        //crumbling type code
+        function crumbling(){
+
+        }
+
         console.log("platform's x-axis: " + spawnPlatform.x);
         console.log("platform's y-axis: " + spawnPlatform.y);
     }
@@ -458,6 +480,8 @@ function game(){
     createPlatform();
     createPlatform();
     createPlatform();
+
+    var onPlatform;
 
     //checks collisions
     function collision(){
@@ -490,8 +514,12 @@ function game(){
             //the area surrounding the platform
             if(player.x >= leftPlatform && player.x <= rightPlatform && playerBottom <= topPlatform){
                 console.log("player on platform");
+                onPlatform = true;
                 player.y -= 15;
-                if (playerBottom <= topPlatform){
+                if (playerBottom <= topPlatform 
+                    // && player.x < leftPlatform && player.x > rightPlatform
+                    ){
+                    console.log("player off platform");
                     player.y += 15;
                 }
             }
@@ -503,17 +531,12 @@ function game(){
     //if the final platform is landed on, reset the platforms and make the player start again from the bottom with randomised platforms
     //this repeats 3 times
 
-    // artefact object
-        var artefactOb = {
-            x: 150,
-            y: 150,
-            visible: true,
-            collected: false,
-        };
+    
 
     function artefactCollection(){        
         //if artefact collides with the player, levelComplete() is called
         document.getElementById("artefact").style.display = "block";
+        document.getElementById("artefactPlatform").style.display = "block";
         var artefact = Object.create(artefactOb);
 
         if (player.x == artefact.x && player.y == artefact.y){
@@ -576,6 +599,7 @@ function levelComplete(){
     document.getElementById("gameChar").style.display = "none";
     document.getElementById("timeElapsed").style.display = "none";
     document.getElementById("artefact").style.display = "none";
+    document.getElementById("artefactPlatform").style.display = "none";
     document.getElementById("healthLoss").style.display = "none";
     document.getElementById("health").style.display = "none";
     
@@ -631,6 +655,9 @@ function scoreDisplay() {
 
     fileHandling();
 
+    document.getElementById("scoreComparison").style.display = "block";
+    document.getElementById("previousResults").style.display = "block";
+    document.getElementById("results").style.display = "block";
     document.getElementById("gameCanvas").style.display = "block";
     document.getElementById("introBG").style.display = "none";
     document.getElementById("char1").style.display = "none";
@@ -650,6 +677,7 @@ function gameOver(){
     document.getElementById("gameChar").style.display = "none";
     document.getElementById("timeElapsed").style.display = "none";
     document.getElementById("artefact").style.display = "none";
+    document.getElementById("artefactPlatform").style.display = "none";
     document.getElementById("healthLoss").style.display = "none";
     document.getElementById("health").style.display = "none";
 
@@ -676,8 +704,50 @@ function fileHandling() {
     //players name, level, time, and score must be displayed
     var username = document.getElementById("username").value;
 
-    var playerData = "NAME: " + username + "\nLEVEL: " + level + "\nTIME: " + seconds + "\nSCORE: " + score;
-    var file = new Blob([playerData], {type:"text/plain"});
+    var playerData = {
+        "NAME":  username,
+        "LEVEL": level,
+        "TIME": seconds,
+        "SCORE": score
+    };
+    //json format
+    var json = JSON.stringify(playerData);
 
+    var file = new Blob([json], {type:"application/json"});
+
+    //download
     document.getElementById("file").href = URL.createObjectURL(file);
+
+    document.getElementById("file").setAttribute("download", "playerData.json");
+}
+
+function scoreComparison() {
+    //file input
+    var input = document.getElementById("previousResults");
+
+    //checks if file is selected
+    if ('files' in input && input.files.length > 0) {
+        var file = input.files[0];
+
+        //file reader
+        var reader = new FileReader();
+
+        //read file contents
+        reader.onload = function(event) {
+            //content of the file
+            var fileContent = event.target.result; 
+            var playerData = JSON.parse(fileContent);
+
+            //player data
+            var output = document.getElementById("results");
+            output.innerHTML = `<p>Name: ${playerData.NAME}</p>
+                <p>Level: ${playerData.LEVEL}</p>
+                <p>Time: ${playerData.TIME}</p>
+                <p>Score: ${playerData.SCORE}</p>`;
+        };
+        //read file as text
+        reader.readAsText(file);
+    } else {
+        alert('Please select a file.');
+    }
 }
