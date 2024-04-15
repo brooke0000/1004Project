@@ -1,15 +1,12 @@
 /*
 TODO:
-upload previous data
-convert seconds to minutes
-add game time
+game won when player collides with artefact
+add total game time in minutes or convert actual gameplay to minutes
 make moving platforms move
 make crumbling platforms crumble
-game won when player collides with artefact
-spawn fire entities. make it so that they can only spawn on normal platforms
-////////////////////////////////hopefully finish up to here by the end of this week////////////////////////////////
 fix player jump
 fix collide with platforms when jumped on
+spawn fire entities. make it so that they can only spawn on normal platforms
 health
 instantly kill player when they collide with a monster
 ////////////////////////////////hopefully finish up to here by the 24th////////////////////////////////
@@ -21,6 +18,20 @@ maybe add powerups
 make help screen available
 maybe make different floors
 */
+
+//keeps track of how long the player has been playing in total
+var gameTime = Date.now();
+var minutes;
+
+function gameplayTime(){
+    var currentTime = Date.now();
+    var actualTime = currentTime - gameTime;
+    minutes = Math.floor(actualTime / 60000);
+
+    console.log("minutes played: " + minutes);
+}
+
+gameplayTime();
 
 //page changes functions
 function removeHomePage() {
@@ -350,7 +361,7 @@ function game(){
     function playerMovement(){
         if(key.left){
             player.x -= 10;
-            console.log("player's x-axis: " + player.x);
+           // console.log("player's x-axis: " + player.x);
             //if player goes to the game left border
             if (player.x < 140){
                 player.x += 10;
@@ -358,7 +369,7 @@ function game(){
         }
         if(key.right){
             player.x += 10;
-            console.log("player's x-axis: " + player.x);
+           // console.log("player's x-axis: " + player.x);
             //if player goes to the game right border
             if (player.x > 1310){
                 player.x -= 10;
@@ -368,7 +379,7 @@ function game(){
             player.y -= 15;
             player.jump = false;
             setTimeout(jumping, 150);
-            console.log("player's y-axis: " + player.y);
+           // console.log("player's y-axis: " + player.y);
         }
         player.avatar.style.left = player.x + "px";
         player.avatar.style.top = player.y + "px";        
@@ -433,7 +444,7 @@ function game(){
         //displays platform based on the randomised result in the x-axis
         if (spawnPlatform.type == "crumbling"){
             document.getElementById(crumblingID).style.display = "block";
-            spawnPlatform.x = Math.floor(Math.random() * 1181) + 180;
+            spawnPlatform.x = Math.floor(Math.random() * 1000) + 100;
         }
         else{
             document.getElementById(platformID).style.display = "block";
@@ -531,16 +542,20 @@ function game(){
     //if the final platform is landed on, reset the platforms and make the player start again from the bottom with randomised platforms
     //this repeats 3 times
 
-    
-
     function artefactCollection(){        
         //if artefact collides with the player, levelComplete() is called
         document.getElementById("artefact").style.display = "block";
         document.getElementById("artefactPlatform").style.display = "block";
+
         var artefact = Object.create(artefactOb);
 
-        if (player.x == artefact.x && player.y == artefact.y){
-            collected = true;
+        //calculate distance between player and artefact
+        var PAX = player.x - artefact.y;
+        var PAY = player.y - artefact.y;
+        var distance = Math.sqrt(PAX*PAX + PAY*PAY);
+
+        if (distance < 20){
+            artefactOb.collected = true;
             levelComplete();
         }
     }
